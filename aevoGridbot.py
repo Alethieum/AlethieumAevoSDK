@@ -1,0 +1,142 @@
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+from AlethieumAevoSDK import AevoClient
+import asyncio
+import json
+from pprint import pprint
+import pendulum
+import time
+import numpy as np
+from loguru import logger
+
+
+### CONFIG ###
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+instrument_id = 1
+instrument_name = "ETH-PERP"
+orderSize = 0.01
+gridSize = 1
+girdLines = 10
+
+### CLIENT ###
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+client = AevoClient(
+    signing_key="0x4de88bc83f60e4da5d572fa86bd3c9f305507df1fff9817839547a45e47c6b07",
+    wallet_address="0x13B7e774A1685210Ef13dF32eC9D0AAF4E3e6014",
+    api_key="67rhYQeypNRqYPek3gjXvZKcVMrKARZ5",
+    api_secret="06c65e235d5f1d53ff94723721d7c2ed9f64bbc8f0bbbcb0dceb4cd2ad1dba82",
+    env="mainnet",
+)
+
+### TASKS ###
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+
+def get_midmarket_price(client, market):
+    orderbook = client.get_orderbook(market)
+    best_bid = float(orderbook["bids"][0][0])
+    best_ask = float(orderbook["asks"][0][0])
+    midmarket_price = np.mean([best_bid, best_ask])
+    return round(midmarket_price, 2)
+
+
+### DATA ###
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+midmarket_price = get_midmarket_price(client, instrument_name)  # get midmarket price
+
+
+### GRIDBOT ###
+# # Description: This file contains the tasks that will be executed by the celery worker
+
+
+async def aevo_gridbot():
+    try:
+        await client.open_connection()
+        await client.subscribe_fills()
+
+        async for msg in client.read_messages():
+            message = json.loads(msg)
+            if "data" in message and "success" in message["data"]:
+                if message["data"]["success"] == True:
+                    logger.info(
+                        "🔌 Websocket connected at "
+                        + str(pendulum.now())
+                        + " to account "
+                        + message["data"]["account"]
+                    )
+                    logger.info("🧑‍🍳 Starting Gridbot...")
+                    for i in range(0, girdLines):
+                        await client.create_order(
+                            instrument_id,
+                            True,
+                            midmarket_price - (i * gridSize),
+                            orderSize,
+                        )
+                        await asyncio.sleep(1)  # add a 1 second delay
+                        await client.create_order(
+                            instrument_id,
+                            False,
+                            midmarket_price + (i * gridSize),
+                            orderSize,
+                        )
+                        await asyncio.sleep(1)  # add a 1 second delay
+                else:
+                    logger.info(message)
+            elif "data" in message and "fill" in message["data"]:
+                if message["data"]["fill"]["side"] == "buy":
+                    logger.info("buy order filled")
+                    logger.info("creating sell order")
+                    await client.create_order(
+                        instrument_id,
+                        False,
+                        float(message["data"]["fill"]["price"]) + gridSize,
+                        orderSize,
+                    )
+                    logger.info(
+                        "created new sell order at "
+                        + str(float(message["data"]["fill"]["price"]) + gridSize)
+                    )
+                elif message["data"]["fill"]["side"] == "sell":
+                    logger.info("sell order filled")
+                    logger.info("creating buy order")
+                    await client.create_order(
+                        instrument_id,
+                        True,
+                        float(message["data"]["fill"]["price"]) - gridSize,
+                        orderSize,
+                    )
+                    logger.info(
+                        "created new buy order at "
+                        + str(float(message["data"]["fill"]["price"]) - gridSize)
+                    )
+            else:
+                logger.info(message)
+    except websockets.exceptions.ConnectionClosedError as e:
+        logger.error(f"Connection closed unexpectedly: {e}")
+        logger.info("Cancelling all orders...")
+        await client.cancel_all_orders(instrument_id)
+        logger.info("All orders cancelled.")
+        logger.info("Websocket disconnected at " + str(pendulum.now()))
+        logger.info("")
+        logger.info("Attempting to reconnect at " + str(pendulum.now()) + "...")
+        logger.info("")
+        time.sleep(1)
+        await aevo_gridbot()
+    except Exception as e:
+        logger.error(e)
+        logger.info("Websocket disconnected at " + str(pendulum.now()))
+        logger.info("")
+        logger.info("Attempting to reconnect at " + str(pendulum.now()) + "...")
+        logger.info("")
+        time.sleep(1)
+        await aevo_gridbot()
+
+
+def start_gridbot():
+    asyncio.get_event_loop().run_until_complete(aevo_gridbot())
+
+
+start_gridbot()
