@@ -8,7 +8,7 @@ import pendulum
 import time
 import numpy as np
 from loguru import logger
-
+ 
 
 ### CONFIG ###
 # # Description: This file contains the tasks that will be executed by the celery worker
