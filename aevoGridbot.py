@@ -1,5 +1,5 @@
 # # Description: This file contains the tasks that will be executed by the celery worker
-
+from config import clientConfig
 from AlethieumAevoSDK import AevoClient
 import asyncio
 import json
@@ -22,13 +22,7 @@ girdLines = 10
 ### CLIENT ###
 # # Description: This file contains the tasks that will be executed by the celery worker
 
-client = AevoClient(
-    signing_key="0x4de88bc83f60e4da5d572fa86bd3c9f305507df1fff9817839547a45e47c6b07",
-    wallet_address="0x13B7e774A1685210Ef13dF32eC9D0AAF4E3e6014",
-    api_key="67rhYQeypNRqYPek3gjXvZKcVMrKARZ5",
-    api_secret="06c65e235d5f1d53ff94723721d7c2ed9f64bbc8f0bbbcb0dceb4cd2ad1dba82",
-    env="mainnet",
-)
+client = AevoClient(**clientConfig)
 
 ### TASKS ###
 # # Description: This file contains the tasks that will be executed by the celery worker
