@@ -101,7 +101,7 @@ class AevoClient:
             self.connection = await websockets.connect(
                 self.ws_url,
                 ssl=ssl_context,
-                ping_interval=10,
+                ping_interval=1,
                 extra_headers=extra_headers,
             )
             if not self.extra_headers:
@@ -191,7 +191,9 @@ class AevoClient:
         return data
 
     def get_orderbook(self, instrument_name):
-        req = self.client.get(f"{self.rest_url}/orderbook?instrument_name={instrument_name}")
+        req = self.client.get(
+            f"{self.rest_url}/orderbook?instrument_name={instrument_name}"
+        )
         data = req.json()
         return data
 

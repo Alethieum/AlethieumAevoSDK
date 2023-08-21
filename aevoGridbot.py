@@ -1,5 +1,6 @@
-# # Description: This file contains the tasks that will be executed by the celery worker
-from config import clientConfig
+# # Description: Imports needed
+
+from clientConfig import clientConfig
 from AlethieumAevoSDK import AevoClient
 import asyncio
 import json
@@ -9,8 +10,26 @@ import time
 import numpy as np
 from loguru import logger
  
+### CLIENT ###
+# # Description: Please add your API key and secret to the clientConfig file.
+# # Description: After importing the clientConfig, we can now create the client object.
+# # Description: Please ensure that the clientConfig is correct before running the script.
 
-### CONFIG ###
+client = AevoClient(**clientConfig)
+
+### TASKS ###
+# # Description: This section is for tasks
+
+def get_midmarket_price(client, market):
+    orderbook = client.get_orderbook(market)
+    best_bid = float(orderbook["bids"][0][0])
+    best_ask = float(orderbook["asks"][0][0])
+    midmarket_price = np.mean([best_bid, best_ask])
+    return round(midmarket_price, 2)
+    # # Function: This task gets the midmarket price of the instrument.
+
+
+### GRIDBOT CONFIG ###
 # # Description: This file contains the tasks that will be executed by the celery worker
 
 instrument_id = 1
@@ -19,27 +38,10 @@ orderSize = 0.01
 gridSize = 1
 girdLines = 10
 
-### CLIENT ###
-# # Description: This file contains the tasks that will be executed by the celery worker
-
-client = AevoClient(**clientConfig)
-
-### TASKS ###
-# # Description: This file contains the tasks that will be executed by the celery worker
-
-
-def get_midmarket_price(client, market):
-    orderbook = client.get_orderbook(market)
-    best_bid = float(orderbook["bids"][0][0])
-    best_ask = float(orderbook["asks"][0][0])
-    midmarket_price = np.mean([best_bid, best_ask])
-    return round(midmarket_price, 2)
-
-
 ### DATA ###
-# # Description: This file contains the tasks that will be executed by the celery worker
+# # Description: This section is for data needed for the script
 
-midmarket_price = get_midmarket_price(client, instrument_name)  # get midmarket price
+midmarket_price = get_midmarket_price(client, instrument_name)
 
 
 ### GRIDBOT ###
@@ -108,19 +110,11 @@ async def aevo_gridbot():
                     )
             else:
                 logger.info(message)
-    except websockets.exceptions.ConnectionClosedError as e:
+    except Exception as e:
         logger.error(f"Connection closed unexpectedly: {e}")
         logger.info("Cancelling all orders...")
         await client.cancel_all_orders(instrument_id)
         logger.info("All orders cancelled.")
-        logger.info("Websocket disconnected at " + str(pendulum.now()))
-        logger.info("")
-        logger.info("Attempting to reconnect at " + str(pendulum.now()) + "...")
-        logger.info("")
-        time.sleep(1)
-        await aevo_gridbot()
-    except Exception as e:
-        logger.error(e)
         logger.info("Websocket disconnected at " + str(pendulum.now()))
         logger.info("")
         logger.info("Attempting to reconnect at " + str(pendulum.now()) + "...")
