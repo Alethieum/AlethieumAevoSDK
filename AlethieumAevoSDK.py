@@ -38,7 +38,7 @@ CONFIG = {
     },
 }
 
-timestamp = int(time.time())
+# timestamp = int(time.time())
 
 
 class Order(EIP712Struct):
@@ -340,7 +340,13 @@ class AevoClient:
 
     # Private WS Commands
     def create_order_ws_json(
-        self, instrument_id, is_buy, limit_price, quantity, post_only=True
+        self,
+        instrument_id,
+        is_buy,
+        limit_price,
+        quantity,
+        post_only=True,
+        # timestamp=int(time.time()),
     ):
         salt, signature = self.sign_order(instrument_id, is_buy, limit_price, quantity)
         return {
@@ -352,6 +358,7 @@ class AevoClient:
             "salt": str(salt),
             "signature": signature,
             "post_only": post_only,
+            "timestamp": int(time.time()),
         }
 
     def create_order_rest_json(
@@ -362,7 +369,7 @@ class AevoClient:
         quantity,
         post_only=True,
         decimals=10**6,
-        timestamp=int(time.time()),
+        # timestamp=int(time.time()),
     ):
         salt, signature = self.sign_order(
             instrument_id, is_buy, limit_price, quantity, decimals=decimals
@@ -376,7 +383,7 @@ class AevoClient:
             "salt": str(salt),
             "signature": signature,
             "post_only": post_only,
-            "timestamp": timestamp,
+            "timestamp": int(time.time()),
         }
 
     async def create_order(
@@ -436,7 +443,7 @@ class AevoClient:
         self, instrument_id, is_buy, limit_price, quantity, decimals=10**6
     ):
         salt = random.randint(0, 10**10)  # We just need a large enough number
-        timestamp = int(time.time())
+        # timestamp = int(time.time())
 
         order_struct = Order(
             maker=self.wallet_address,  # The wallet's main address
