@@ -3,6 +3,7 @@ import json
 import random
 import traceback
 import ssl
+import time
 
 
 import requests
@@ -37,6 +38,8 @@ CONFIG = {
     },
 }
 
+timestamp = int(time.time())
+
 
 class Order(EIP712Struct):
     maker = Address()
@@ -45,6 +48,7 @@ class Order(EIP712Struct):
     amount = Uint(256)
     salt = Uint(256)
     instrument = Uint(256)
+    timestamp = Uint(256)
 
 
 class AevoClient:
@@ -358,6 +362,7 @@ class AevoClient:
         quantity,
         post_only=True,
         decimals=10**6,
+        timestamp=int(time.time()),
     ):
         salt, signature = self.sign_order(
             instrument_id, is_buy, limit_price, quantity, decimals=decimals
@@ -371,6 +376,7 @@ class AevoClient:
             "salt": str(salt),
             "signature": signature,
             "post_only": post_only,
+            "timestamp": timestamp,
         }
 
     async def create_order(
@@ -430,14 +436,16 @@ class AevoClient:
         self, instrument_id, is_buy, limit_price, quantity, decimals=10**6
     ):
         salt = random.randint(0, 10**10)  # We just need a large enough number
+        timestamp = int(time.time())
 
         order_struct = Order(
-            maker=self.wallet_address,  # The wallet"s main address
+            maker=self.wallet_address,  # The wallet's main address
             isBuy=is_buy,
             limitPrice=int(round(limit_price * decimals, is_buy)),
             amount=int(round(quantity * 10**6, is_buy)),
             salt=salt,
             instrument=instrument_id,
+            timestamp=int(time.time()),  # Add the timestamp to the order object
         )
 
         domain = make_domain(**self.signing_domain)
