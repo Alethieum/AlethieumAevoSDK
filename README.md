@@ -4,4 +4,6 @@ The AlethieumAevoSDK is a Python library that provides developers with a simple 
 ## Installation
 To install the SDK, you can use the poetry package manager. First, make sure you have poetry installed on your system. Then, navigate to the root directory of the SDK and run the following command:
 
+```python
 poetry install
+```
