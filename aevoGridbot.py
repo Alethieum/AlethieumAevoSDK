@@ -35,7 +35,7 @@ def get_midmarket_price(client, market):
 instrument_id = 1
 instrument_name = "ETH-PERP"
 orderSize = 0.01
-gridSize = 1
+gridSize = 0.5
 girdLines = 10
 
 ### DATA ###
