@@ -67,29 +67,27 @@ Once there we can enable trading...
 
 2 - Go to Aevo App and connect your wallet. The button can be found on the top right-hand corner.
 
-![Connect Wallet](./images/a392f46-connect_wallet_new.png) 
-
+<img src="./images/a392f46-connect_wallet_new.png" width=50% height=50%>
 
 3 - Connect your wallet using either Metamask, Wallet Connect or Coinbase Wallet.
 
-![Connect Wallet](./images/04f431c-wallet_select.png)
+<img src='./images/04f431c-wallet_select.png' width=50% height=50%>
 
 4 - Click the Sign Message button. Optionally, you can disable Remember Me which only generates a temporary session key for trading.
 
-![Enable Trading](./images/dd5f0b5-enable_trading.png)
+<img src='./images/dd5f0b5-enable_trading.png' width=50% height=50%>
 
 5 - Sign the message from your wallet. Below is an example of how it looks like on Metamask
 
-![Sign Message](./images/4cef4a7-metamask_popup.png)
+<img src='./images/4cef4a7-metamask_popup.png' width=50% height=50%>
 
 6 - Finally, you will be able to deposit USDC from the network.
 
-![Deposit USDC](./images/dd5f0b5-enable_trading.png)
+<img src='./images/dd5f0b5-enable_trading.png' width=50% height=50%>
 
 You can now start trading on Aevo!
 
 ## Installation
-
 
 To install the SDK, you can use the poetry package manager. First, make sure you have poetry installed on your system. Then, create a virtual environment using the following command:
 
@@ -107,6 +105,12 @@ This will install the SDK and all of its dependencies in your virtual environmen
 ## Configuration
 Before you can use the SDK, you need to configure it with your API key and secret. You will need to generate an API key and secret. You can do so by following the steps below:
 
+1 - Go to: https://app.aevo.xyz/settings/api-keys
+
+Click on the API key you want to copy. This will automatically add the secret to your clipboard, ready for you to use. Similarly, you can do the same for your API secret.
+
+<img src='images/96a8590-api_key_new.png' width=50% height=50%>
+
 Once you have these, open the clientConfig.py file in the root directory of the SDK and fill in the following fields:
 
 - `signing_key`: Your private key for signing orders.
@@ -117,11 +121,7 @@ Once you have these, open the clientConfig.py file in the root directory of the 
 
 Make sure to save the `clientConfig.py` file after filling in the fields.
 
-Write something here about key sercerity
-
-## Usage
-
-How to use it
+Note: It is important to keep your API key and secret secure. If someone gains access to your API key and secret, they could potentially access your Aevo account and perform actions on your behalf, including buying and selling assets. Make sure to keep your API key and secret in a secure location and do not share them with anyone. clientConfig.py is in the .gitignore file so it will not be pushed to github.
 
 # Gridbot Parameters
 
@@ -140,14 +140,30 @@ The `aevo_gridbot()` function takes the following parameters:
 
 Make sure to set these parameters appropriately for your trading strategy.
 
-I hope this helps! Let me know if you have any further questions or need any more assistance.
-
-
+I hope this helps! Let me know if you have any further questions or need any more assistance! I'm happy to help! The strategy and parameters are always yours!
 ## Support
 
+Alethieum has a Discord server where you can ask questions and get support. You can join the Discord server by clicking on the following link: https://discord.gg/WXb6H6U4EB
+
+Please use the channel #aevo-sdk in the support sections for any questions related to the SDK.
 ## Roadmap
 
-## Goodbye 
+The SDK is currently in beta. We are working on adding more features and functions to the SDK, including support for more order execution strategies and trading bots. Please stay tuned for updates and of course let us know if you have any suggestions or feedback!
+## Goodbye
+
+Thank you! I hope you found this useful and that it helps you get started with the SDK. If you have any questions or feedback, please let me know in the comments below. I'm always happy to help! Happy trading!
 
 
+## License
 
+The AlethieumAevoSDK is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+The MIT License (MIT)
+
+Copyright (c) [2023] [Alethieum]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
