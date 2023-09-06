@@ -123,6 +123,18 @@ Make sure to save the `clientConfig.py` file after filling in the fields.
 
 Note: It is important to keep your API key and secret secure. If someone gains access to your API key and secret, they could potentially access your Aevo account and perform actions on your behalf, including buying and selling assets. Make sure to keep your API key and secret in a secure location and do not share them with anyone. clientConfig.py is in the .gitignore file so it will not be pushed to github.
 
+## Usage
+
+Head to aevoGridbot.py, where you will find a Gribot ready to be used
+
+I have also provided a place order example in the aevoPlaceOrder.py file
+
+To run the Gridbot, simply run the following command:
+
+```python
+poetry run python aevoGridbot.py
+```
+
 # Gridbot Parameters
 
 The `aevo_gridbot()` function takes the following parameters:

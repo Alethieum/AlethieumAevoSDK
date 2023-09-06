@@ -32,11 +32,11 @@ def get_midmarket_price(client, market):
 ### GRIDBOT CONFIG ###
 # # Description: This file contains the tasks that will be executed by the celery worker
 
-instrument_id = 1
-instrument_name = "ETH-PERP"
-orderSize = 0.01
-gridSize = 0.5
-girdLines = 10
+instrument_id = 
+instrument_name = 
+orderSize = 
+gridSize = 
+girdLines =
 
 ### DATA ###
 # # Description: This section is for data needed for the script
