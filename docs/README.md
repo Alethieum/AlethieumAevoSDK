@@ -2,9 +2,13 @@
 
 ![My Project Logo](./images/WCE-3Dma91gZQvGeNazQ_-1.jpeg)
 
-Welcome to the Alethieum Aevo SDK!
+## Welcome to the Alethieum Aevo SDK!
 
 The Alethieum Aevo SDK is a Python library that provides developers with a simple and efficient way to programmatically connect to the Aevo exchange. The SDK includes public functions, order execution strategies, and trading bots like Gridbots, enabling developers to build custom trading applications and automate their trading strategies on Aevo.
+
+The SDK is currently in beta. We are working on adding more features and functions to the SDK, including support for more order execution strategies and trading bots. Please stay tuned for updates and of course let us know if you have any suggestions or feedback!
+
+You can provide feedback by completing this form: https://alethieum.deform.cc/aevosdk/ - All users that complete the form will be eligible for a airdropped an NFT from the Alethieum DAO (Rewards for holding?)!
 
 ## Introduction to Aevo
 
@@ -161,6 +165,7 @@ Please use the channel #aevo-sdk in the support sections for any questions relat
 ## Roadmap
 
 The SDK is currently in beta. We are working on adding more features and functions to the SDK, including support for more order execution strategies and trading bots. Please stay tuned for updates and of course let us know if you have any suggestions or feedback!
+
 ## Goodbye
 
 Thank you! I hope you found this useful and that it helps you get started with the SDK. If you have any questions or feedback, please let me know in the comments below. I'm always happy to help! Happy trading!
