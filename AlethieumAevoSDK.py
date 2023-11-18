@@ -13,6 +13,8 @@ from eth_account import Account
 from loguru import logger
 from web3 import Web3
 
+
+
 w3 = Web3(
     Web3.HTTPProvider("http://127.0.0.1:8545")
 )  # This URL doesn"t actually do anything, we just need a web3 instance
@@ -243,6 +245,14 @@ class AevoClient:
         req = self.client.get(f"{self.rest_url}/account", headers=self.rest_headers)
         return req.json()
 
+    def rest_get_apikey(self):
+        req = self.client.get(f"{self.rest_url}/account", headers=self.rest_headers)
+        data = req.json()
+        api_keys = data.get('api_keys', [])
+        for api_key_info in api_keys:
+            return api_key_info.get('api_key')
+        return None
+
     def rest_get_portfolio(self):
         req = self.client.get(f"{self.rest_url}/portfolio", headers=self.rest_headers)
         return req.json()
@@ -269,6 +279,7 @@ class AevoClient:
             f"{self.rest_url}/orders-all", json=body, headers=self.rest_headers
         )
         return req.json()
+
 
     # Public WS Subscriptions
     async def subscribe_tickers(self, asset):
@@ -457,6 +468,26 @@ class AevoClient:
 
         domain = make_domain(**self.signing_domain)
         signable_bytes = Web3.keccak(order_struct.signable_bytes(domain=domain))
+        return (
+            salt,
+            Account._sign_hash(signable_bytes, self.signing_key).signature.hex(),
+        )
+
+
+    def sign_transaction(
+        self, decimals=10**6
+    ):
+        salt = random.randint(0, 10**10)  # We just need a large enough number
+        # timestamp = int(time.time())
+
+        transaction_struct = Order(
+            maker=self.wallet_address,  # The wallet's main address
+            salt=salt,
+            timestamp=int(time.time()),  # Add the timestamp to the order object
+        )
+
+        domain = make_domain(**self.signing_domain)
+        signable_bytes = Web3.keccak(transaction_struct.signable_bytes(domain=domain))
         return (
             salt,
             Account._sign_hash(signable_bytes, self.signing_key).signature.hex(),
