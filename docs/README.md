@@ -8,7 +8,7 @@ The Alethieum Aevo SDK is a Python library that provides developers with a simpl
 
 The SDK is currently in beta. We are working on adding more features and functions to the SDK, including support for more order execution strategies and trading bots. Please stay tuned for updates and of course let us know if you have any suggestions or feedback!
 
-You can provide feedback by completing this form: https://alethieumaevosdk.deform.cc/ - All users that complete the form will be eligible for a airdropped an NFT from the Alethieum DAO (Rewards for holding?)!
+You can provide feedback by completing this form: https://alethieumlabs.deform.cc/aevofeedback - All users that complete the form will be eligible for a airdropped an NFT from the Alethieum DAO (Rewards for holding?)!
 
 ## Introduction to Aevo
 
